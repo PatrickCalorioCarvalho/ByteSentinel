@@ -1,0 +1,25 @@
+services:
+  bytesentineldb:
+    image: pgvector/pgvector:pg17
+    container_name: ByteSentinelDB
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: ByteSentinelDB
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  
+  bytesentinelserver:
+    build: .
+    container_name: ByteSentinelServer
+    depends_on:
+      - bytesentineldb
+    environment:
+      - ConnectionStrings__Default=Host=bytesentineldb;Port=5432;Database=centraldb;Username=admin;Password=admin
+    ports:
+      - "55000:8080"
+
+volumes:
+  pgdata:

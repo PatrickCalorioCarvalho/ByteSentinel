@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/Itens de Solução/">
+    <File Path="docker-compose.yaml" />
+  </Folder>
+  <Project Path="ByteSentinelAgent/ByteSentinelAgent.csproj" />
+  <Project Path="ByteSentinelServer/ByteSentinelServer.csproj" />
+</Solution>

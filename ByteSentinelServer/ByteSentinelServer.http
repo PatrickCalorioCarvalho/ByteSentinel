@@ -1,0 +1,6 @@
+@ByteSentinelServer_HostAddress = http://localhost:5219
+
+GET {{ByteSentinelServer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
