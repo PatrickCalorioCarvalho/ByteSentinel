@@ -134,33 +134,33 @@ jobs:
             patrickcaloriocarvalho/bytesentinel:latest
             patrickcaloriocarvalho/bytesentinel:${{ needs.version.outputs.tag }}
 
-release:
-  name: Create Release
-  runs-on: ubuntu-latest
-  needs: [build-agent, build-app, docker, version]
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: [build-agent, build-app, docker, version]
 
-  steps:
-    - name: Checkout repo
-      uses: actions/checkout@v4
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-    - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v4
 
-    - name: Create Tag
-      run: |
-        git config user.name "github-actions"
-        git config user.email "actions@github.com"
-        git tag ${{ needs.version.outputs.tag }}
-        git push origin ${{ needs.version.outputs.tag }}
+      - name: Create Tag
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git tag ${{ needs.version.outputs.tag }}
+          git push origin ${{ needs.version.outputs.tag }}
 
-    - name: Create Release
-      uses: softprops/action-gh-release@v2
-      with:
-        tag_name: ${{ needs.version.outputs.tag }}
-        name: ByteSentinel ${{ needs.version.outputs.tag }}
-        files: |
-          agent-win-x64.zip
-          agent-linux-x64.zip
-          maui-windows.zip
-          maui-android.zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.version.outputs.tag }}
+          name: ByteSentinel ${{ needs.version.outputs.tag }}
+          files: |
+            agent-win-x64.zip
+            agent-linux-x64.zip
+            maui-windows.zip
+            maui-android.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
