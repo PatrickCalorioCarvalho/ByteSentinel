@@ -53,10 +53,15 @@ jobs:
             -p:InformationalVersion=${{ needs.version.outputs.tag }} \
             -o publish/${{ matrix.runtime }}
 
+      - name: Zip Artifact
+        run: |
+          cd publish/${{ matrix.runtime }}
+          zip -r ../../agent-${{ matrix.runtime }}.zip .
+
       - uses: actions/upload-artifact@v4
         with:
           name: agent-${{ matrix.runtime }}
-          path: publish/${{ matrix.runtime }}
+          path: agent-${{ matrix.runtime }}.zip
 
   build-app:
     name: Build MAUI App
@@ -75,28 +80,35 @@ jobs:
 
       - name: Build Windows
         run: |
-          dotnet publish ByteSentinelApp \
-            -c Release \
-            -f net10.0-windows10.0.19041.0 \
-            -p:Version=${{ needs.version.outputs.version }} \
-            -p:FileVersion=${{ needs.version.outputs.version }} \
-            -p:InformationalVersion=${{ needs.version.outputs.tag }} \
+          dotnet publish ByteSentinelApp `
+            -c Release `
+            -f net10.0-windows10.0.19041.0 `
+            -p:Version=${{ needs.version.outputs.version }} `
+            -p:FileVersion=${{ needs.version.outputs.version }} `
+            -p:InformationalVersion=${{ needs.version.outputs.tag }} `
             -o publish/windows
 
       - name: Build Android
         run: |
-          dotnet publish ByteSentinelApp \
-            -c Release \
-            -f net10.0-android \
-            -p:Version=${{ needs.version.outputs.version }} \
-            -p:FileVersion=${{ needs.version.outputs.version }} \
-            -p:InformationalVersion=${{ needs.version.outputs.tag }} \
+          dotnet publish ByteSentinelApp `
+            -c Release `
+            -f net10.0-android `
+            -p:Version=${{ needs.version.outputs.version }} `
+            -p:FileVersion=${{ needs.version.outputs.version }} `
+            -p:InformationalVersion=${{ needs.version.outputs.tag }} `
             -o publish/android
+
+      - name: Zip App
+        run: |
+          Compress-Archive -Path publish/windows/* -DestinationPath maui-windows.zip
+          Compress-Archive -Path publish/android/* -DestinationPath maui-android.zip
 
       - uses: actions/upload-artifact@v4
         with:
           name: maui-app
-          path: publish/
+          path: |
+            maui-windows.zip
+            maui-android.zip
 
   docker:
     name: Docker Build & Push
@@ -119,8 +131,8 @@ jobs:
           file: ByteSentinelServer/Dockerfile
           push: true
           tags: |
-            seuusuario/bytesentinel:latest
-            seuusuario/bytesentinel:${{ needs.version.outputs.tag }}
+            patrickcaloriocarvalho/bytesentinel:latest
+            patrickcaloriocarvalho/bytesentinel:${{ needs.version.outputs.tag }}
 
   release:
     name: Create Release
@@ -143,8 +155,9 @@ jobs:
           tag_name: ${{ needs.version.outputs.tag }}
           name: ByteSentinel ${{ needs.version.outputs.tag }}
           files: |
-            agent-win-x64/**
-            agent-linux-x64/**
-            maui-app/**
+            agent-win-x64.zip
+            agent-linux-x64.zip
+            maui-windows.zip
+            maui-android.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
