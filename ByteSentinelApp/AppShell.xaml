@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="ByteSentinelApp.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:ByteSentinelApp"
+    Title="ByteSentinel">
+
+    <TabBar>
+
+        <!-- DASHBOARD -->
+        <ShellContent
+            Title="Dashboard"
+            Route="dashboard"
+            ContentTemplate="{DataTemplate pages:MainPage}" />
+
+        <!-- AGENTS -->
+        <ShellContent
+            Title="Agents"
+            Route="agents"
+            ContentTemplate="{DataTemplate pages:AgentsPage}" />
+
+        <!-- SETTINGS -->
+        <ShellContent
+            Title="Settings"
+            Route="settings"
+            ContentTemplate="{DataTemplate pages:SettingsPage}" />
+
+    </TabBar>
+
+</Shell>

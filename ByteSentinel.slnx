@@ -3,5 +3,8 @@
     <File Path="docker-compose.yaml" />
   </Folder>
   <Project Path="ByteSentinelAgent/ByteSentinelAgent.csproj" />
+  <Project Path="ByteSentinelApp/ByteSentinelApp.csproj" Id="ccc9b705-6fd0-47ee-a2e3-1e5aae747f35">
+    <Deploy Solution="Debug|*" />
+  </Project>
   <Project Path="ByteSentinelServer/ByteSentinelServer.csproj" />
 </Solution>

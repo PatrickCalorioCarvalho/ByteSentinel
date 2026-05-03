@@ -12,14 +12,26 @@ services:
       - pgdata:/var/lib/postgresql/data
   
   bytesentinelserver:
-    build: .
+    build:
+      context: .
+      dockerfile: ByteSentinelServer/Dockerfile
     container_name: ByteSentinelServer
     depends_on:
       - bytesentineldb
     environment:
-      - ConnectionStrings__Default=Host=bytesentineldb;Port=5432;Database=centraldb;Username=admin;Password=admin
+      - ConnectionStrings__Default=Host=bytesentineldb;Port=5432;Database=ByteSentinelDB;Username=admin;Password=admin
     ports:
       - "55000:8080"
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: ByteSentinelPgAdmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - bytesentineldb
 
 volumes:
   pgdata:

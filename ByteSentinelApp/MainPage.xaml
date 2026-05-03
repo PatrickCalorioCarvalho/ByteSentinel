@@ -1,0 +1,171 @@
+﻿<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
+    xmlns:charts="clr-namespace:LiveChartsCore.SkiaSharpView;assembly=LiveChartsCore.SkiaSharpView"
+    x:Class="ByteSentinelApp.MainPage"
+    BackgroundColor="#0B1220">
+
+        <!-- MAIN CONTENT -->
+    <ScrollView Grid.Column="1">
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <!-- SELECT AGENT -->
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="10">
+
+                    <Label Text="Selecionar Agent"
+                               TextColor="White"
+                               FontAttributes="Bold"/>
+
+                    <CollectionView ItemsSource="{Binding Agents}"
+                                        SelectionMode="Single"
+                                        SelectedItem="{Binding SelectedAgent}">
+
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10"/>
+                        </CollectionView.ItemsLayout>
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource Card}" Padding="10">
+
+                                    <VerticalStackLayout>
+
+                                        <Label Text="{Binding AgentId}"
+                                                   TextColor="White"
+                                                   FontSize="12"/>
+
+                                        <Label Text="Online"
+                                                   TextColor="Lime"
+                                                   FontSize="10"/>
+
+                                    </VerticalStackLayout>
+
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+
+                    </CollectionView>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- KPI CARDS -->
+            <Grid ColumnDefinitions="*,*"
+      RowDefinitions="Auto,Auto"
+      ColumnSpacing="12"
+      RowSpacing="12">
+
+                <!-- CPU -->
+                <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource Card}">
+                    <VerticalStackLayout>
+                        <Label Text="CPU" TextColor="Gray"/>
+                        <Label Text="{Binding Cpu}"
+                   FontSize="26"
+                   TextColor="Orange"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- RAM -->
+                <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource Card}">
+                    <VerticalStackLayout>
+                        <Label Text="RAM" TextColor="Gray"/>
+                        <Label Text="{Binding Ram}"
+                   FontSize="26"
+                   TextColor="LightBlue"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Containers -->
+                <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource Card}">
+                    <VerticalStackLayout>
+                        <Label Text="Containers" TextColor="Gray"/>
+                        <Label Text="{Binding ContainersCount}"
+                   FontSize="26"
+                   TextColor="White"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Status -->
+                <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource Card}">
+                    <VerticalStackLayout>
+                        <Label Text="Status" TextColor="Gray"/>
+                        <Label Text="{Binding Status}"
+                   TextColor="{Binding StatusColor}"/>
+                    </VerticalStackLayout>
+                </Border>
+
+            </Grid>
+
+            <!-- CHART -->
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="10">
+
+                    <Label Text="CPU / RAM Histórico"
+                               TextColor="White"
+                               FontAttributes="Bold"/>
+
+                    <lvc:CartesianChart 
+                        Series="{Binding Series}"
+                        HeightRequest="260"
+                        BackgroundColor="#111827">
+                    </lvc:CartesianChart>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- CONTAINERS -->
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="10">
+
+                    <Label Text="Containers"
+                               TextColor="White"
+                               FontAttributes="Bold"/>
+
+                    <!-- HEADER -->
+                    <Grid ColumnDefinitions="*,Auto,Auto,Auto">
+                        <Label Text="Nome" TextColor="Gray"/>
+                        <Label Text="Status" Grid.Column="1" TextColor="Gray"/>
+                        <Label Text="CPU" Grid.Column="2" TextColor="Gray"/>
+                        <Label Text="RAM" Grid.Column="3" TextColor="Gray"/>
+                    </Grid>
+
+                    <!-- LIST -->
+                    <CollectionView ItemsSource="{Binding Containers}">
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource Card}" Margin="2">
+
+                                    <Grid ColumnDefinitions="*,Auto,Auto,Auto">
+
+                                        <Label Text="{Binding Name}"
+                                                   TextColor="White"/>
+
+                                        <Label Text="{Binding Status}"
+                                                   Grid.Column="1"
+                                                   TextColor="Lime"/>
+
+                                        <Label Text="{Binding Cpu}"
+                                                   Grid.Column="2"
+                                                   TextColor="Orange"/>
+
+                                        <Label Text="{Binding Memory}"
+                                                   Grid.Column="3"
+                                                   TextColor="LightBlue"/>
+
+                                    </Grid>
+
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+
+                    </CollectionView>
+
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,73 @@
+# ========================
+# BUILD / BINARIES
+# ========================
+bin/
+obj/
+out/
+publish/
+
+# ========================
+# VISUAL STUDIO
+# ========================
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ========================
+# RIDER / VS CODE
+# ========================
+.idea/
+.vscode/
+
+# ========================
+# LOGS
+# ========================
+*.log
+
+# ========================
+# TEMP FILES
+# ========================
+*.tmp
+*.temp
+
+# ========================
+# OS FILES
+# ========================
+.DS_Store
+Thumbs.db
+
+# ========================
+# MAUI / ANDROID
+# ========================
+*.keystore
+*.jks
+*.apk
+*.aab
+
+# ========================
+# IOS
+# ========================
+*.ipa
+
+# ========================
+# CONFIG SECRETS
+# ========================
+appsettings.Development.json
+appsettings.Local.json
+
+# ========================
+# NODE (se usar frontend)
+# ========================
+node_modules/
+
+# ========================
+# DOCKER
+# ========================
+docker-compose.override.yml
+
+# ========================
+# EF MIGRATIONS SNAPSHOT (opcional)
+# ========================
+*Migrations/*.Designer.cs

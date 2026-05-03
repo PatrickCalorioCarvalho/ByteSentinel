@@ -1,0 +1,17 @@
+﻿<Application 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="ByteSentinelApp.App">
+
+    <Application.Resources>
+
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="#111827"/>
+            <Setter Property="Stroke" Value="#1F2937"/>
+            <Setter Property="StrokeShape" Value="RoundRectangle 12"/>
+            <Setter Property="Padding" Value="12"/>
+        </Style>
+
+    </Application.Resources>
+
+</Application>

@@ -57,6 +57,7 @@ C:\Users\Patrick\Desktop\ByteSentinel\ByteSentinelAgent\obj\Debug\net10.0\ByteSe
 C:\Users\Patrick\Desktop\ByteSentinel\ByteSentinelAgent\obj\Debug\net10.0\ByteSentinelAgent.AssemblyInfoInputs.cache
 C:\Users\Patrick\Desktop\ByteSentinel\ByteSentinelAgent\obj\Debug\net10.0\ByteSentinelAgent.AssemblyInfo.cs
 C:\Users\Patrick\Desktop\ByteSentinel\ByteSentinelAgent\obj\Debug\net10.0\ByteSentinelAgent.csproj.CoreCompileInputs.cache
+C:\Users\Patrick\Desktop\ByteSentinel\ByteSentinelAgent\obj\Debug\net10.0\ByteSentinelAgent.sourcelink.json
 C:\Users\Patrick\Desktop\ByteSentinel\ByteSentinelAgent\obj\Debug\net10.0\ByteSent.EC2A94B0.Up2Date
 C:\Users\Patrick\Desktop\ByteSentinel\ByteSentinelAgent\obj\Debug\net10.0\ByteSentinelAgent.dll
 C:\Users\Patrick\Desktop\ByteSentinel\ByteSentinelAgent\obj\Debug\net10.0\refint\ByteSentinelAgent.dll

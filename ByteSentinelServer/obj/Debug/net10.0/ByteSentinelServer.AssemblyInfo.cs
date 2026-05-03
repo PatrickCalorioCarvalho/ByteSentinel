@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ByteSentinelServer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+117c9d4be9678f1b85599a19fe97f5c7514e2b7a")]
 [assembly: System.Reflection.AssemblyProductAttribute("ByteSentinelServer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ByteSentinelServer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
