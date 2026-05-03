@@ -1,0 +1,143 @@
+name: 🚀 ByteSentinel CD
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: write
+
+env:
+  VERSION: v${{ github.run_number }}
+
+jobs:
+
+  version:
+    name: Generate Version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.set_version.outputs.version }}
+
+    steps:
+      - name: Generate version
+        id: set_version
+        run: |
+          VERSION="v$(date +'%Y.%m.%d').${{ github.run_number }}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+  build-agent:
+    name: Build Agent
+    runs-on: ubuntu-latest
+    needs: version
+
+    strategy:
+      matrix:
+        runtime: [win-x64, linux-x64]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Publish Agent
+        run: |
+          dotnet publish ByteSentinelAgent \
+            -c Release \
+            -r ${{ matrix.runtime }} \
+            --self-contained true \
+            -p:Version=${{ needs.version.outputs.version }} \
+            -o publish/${{ matrix.runtime }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: agent-${{ matrix.runtime }}
+          path: publish/${{ matrix.runtime }}
+
+  build-app:
+    name: Build MAUI App
+    runs-on: windows-latest
+    needs: version
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Install MAUI
+        run: dotnet workload install maui
+
+      - name: Build Windows
+        run: |
+          dotnet publish ByteSentinelApp \
+            -c Release \
+            -f net9.0-windows10.0.19041.0 \
+            -p:Version=${{ needs.version.outputs.version }} \
+            -o publish/windows
+
+      - name: Build Android
+        run: |
+          dotnet publish ByteSentinelApp \
+            -c Release \
+            -f net9.0-android \
+            -p:Version=${{ needs.version.outputs.version }} \
+            -o publish/android
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: maui-app
+          path: publish/
+
+  docker:
+    name: Docker Build & Push
+    runs-on: ubuntu-latest
+    needs: version
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build & Push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ByteSentinelServer/Dockerfile
+          push: true
+          tags: |
+            seuusuario/bytesentinel:latest
+            seuusuario/bytesentinel:${{ needs.version.outputs.version }}
+
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: [build-agent, build-app, docker, version]
+
+    steps:
+      - uses: actions/download-artifact@v4
+
+      - name: Create Tag
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git tag ${{ needs.version.outputs.version }}
+          git push origin ${{ needs.version.outputs.version }}
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.version.outputs.version }}
+          name: ByteSentinel ${{ needs.version.outputs.version }}
+          files: |
+            agent-win-x64/**
+            agent-linux-x64/**
+            maui-app/**
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
