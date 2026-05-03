@@ -143,24 +143,82 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - uses: actions/download-artifact@v4
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
 
-      - name: Create Tag
+      - name: List files (debug)
+        run: ls -R
+
+      - name: Create Tag (safe)
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git tag ${{ needs.version.outputs.tag }}
-          git push origin ${{ needs.version.outputs.tag }}
+          git fetch --tags
+
+          if git rev-parse ${{ needs.version.outputs.tag }} >/dev/null 2>&1; then
+            echo "Tag already exists"
+          else
+            git tag ${{ needs.version.outputs.tag }}
+            git push origin ${{ needs.version.outputs.tag }}
+          fi
+
+      - name: Generate Release Notes
+        id: notes
+        run: |
+          VERSION=${{ needs.version.outputs.tag }}
+
+          cat <<EOF > release.md
+            # 🚀 ByteSentinel ${VERSION}
+
+            ## 📦 Downloads
+
+            ### 🤖 Agent
+            - 🪟 Windows: [Download](https://github.com/${{ github.repository }}/releases/download/${VERSION}/agent-win-x64.zip)
+            - 🐧 Linux: [Download](https://github.com/${{ github.repository }}/releases/download/${VERSION}/agent-linux-x64.zip)
+
+            ### 🖥️ App (MAUI)
+            - 🪟 Windows: [Download](https://github.com/${{ github.repository }}/releases/download/${VERSION}/maui-windows.zip)
+            - 🤖 Android: [Download](https://github.com/${{ github.repository }}/releases/download/${VERSION}/maui-android.zip)
+
+            ---
+
+            ## 🐳 Docker
+
+            \`\`\`bash
+            docker pull patrickcaloriocarvalho/bytesentinel:${VERSION}
+            \`\`\`
+
+            Ou use:
+
+            \`\`\`bash
+            docker pull patrickcaloriocarvalho/bytesentinel:latest
+            \`\`\`
+
+            ---
+
+            ## 🧠 Informações
+
+            - Version: ${VERSION}
+            - Commit: ${{ github.sha }}
+
+            ---
+
+            ## 📌 Changelog
+            - Build automático via GitHub Actions
+            - Atualização contínua do projeto
+
+            EOF
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.version.outputs.tag }}
-          name: ByteSentinel ${{ needs.version.outputs.tag }}
+          name: 🚀 ByteSentinel ${{ needs.version.outputs.tag }}
+          body_path: release.md
           files: |
-            agent-win-x64.zip
-            agent-linux-x64.zip
-            maui-windows.zip
-            maui-android.zip
+            agent-win-x64/agent-win-x64.zip
+            agent-linux-x64/agent-linux-x64.zip
+            maui-app/maui-windows.zip
+            maui-app/maui-android.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
