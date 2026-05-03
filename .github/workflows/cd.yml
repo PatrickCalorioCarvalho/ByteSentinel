@@ -168,7 +168,6 @@ jobs:
           VERSION=${{ needs.version.outputs.tag }}
 
           cat <<EOF > release.md
-            # 🚀 ByteSentinel ${VERSION}
 
             ## 📦 Downloads
 
@@ -202,11 +201,7 @@ jobs:
             - Commit: ${{ github.sha }}
 
             ---
-
-            ## 📌 Changelog
-            - Build automático via GitHub Actions
-            - Atualização contínua do projeto
-
+            
             EOF
 
       - name: Create Release
